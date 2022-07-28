@@ -1,0 +1,23 @@
+{
+  "engineName": "beta-meta",
+  "endpointBase": "https://tqi.ent.us-central1.gcp.cloud.es.io",
+  "searchKey": "search-efx9y2gtt71ujesmbihrvfs4",
+  "resultFields": [
+    "body_content",
+    "title",
+    "meta_keywords",
+    "url",
+    "meta_description",
+    "url_path"
+
+
+  ],
+  "sortFields": [
+    "title"
+  ],
+  "facets": [
+
+  ],
+  "titleField": "title",
+  "urlField": "url"
+}
