@@ -115,7 +115,7 @@ This app can be easily published to any server as static assets and served. We r
 To deploy:
 
 ```
-npm run build
+npm run build-js
 npm install netlify-cli -g
 netlify deploy # enter ./build as the deploy path
 ```
