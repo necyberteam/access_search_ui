@@ -26,6 +26,8 @@ import {
   getFacetFields
 } from "./config/config-helper";
 
+import { SanitizeHTML, sanitizeStr } from "./Sanitize";
+
 const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig();
 const connector = new AppSearchAPIConnector({
   searchKey,
@@ -33,53 +35,46 @@ const connector = new AppSearchAPIConnector({
   hostIdentifier,
   endpointBase
 });
+//result_fields: {
+ // "body_content": {
+  //  snippet: {
+   //   size: 200,
+    //  fallback: true
+   // }
+  //},
+  //title: {
+   // snippet: {
+    //  size: 10,
+     // fallback: true
+   // }
+ // }
+//},
 const config = {
-  searchQuery: {
-    result_fields: {
-      "body_content": {
-        snippet: {
-          size: 200,
-          fallback: true
-        }
-      },
-      title: {
-        snippet: {
-          size: 10,
-          fallback: true
-        }
-      }
-    },
+  searchQuery: {  
+    
     facets: buildFacetConfigFromConfig(),
     ...buildSearchOptionsFromConfig()
   },
   autocompleteQuery: buildAutocompleteQueryConfig(),
   apiConnector: connector,
-  alwaysSearchOnInitialLoad: false
-  
+  alwaysSearchOnInitialLoad: false  
 };
 
-// For Results; not ready for prime time
 const CustomResultView = ({ result, onClickLink }) => (
   <li className="sui-result">
     <div className="sui-result__header">
       
-        {/* Maintain onClickLink to correct track click throughs for analytics*/}
-        {/* tqi- problem: when title is a snippet, <em> markup for found result is included, but shows up as <em>
-                when title is raw, then <em> markup for found result is missing */}
+        {/* Maintain onClickLink to correct track click throughs for analytics*/}        
         <a className="sui-result__title sui-result__title-link" 
           onClick={onClickLink} 
           href={result.url.raw} 
-          target="_blank" rel="noopener noreferrer">
-          {result.title.snippet}
+          target="_blank" rel="noopener noreferrer"
+          dangerouslySetInnerHTML={{__html: `${sanitizeStr(result.title.snippet)}`} }>
         </a>
       
     </div>
-    <div className="sui-result__body">
-      {/* use 'raw' values of fields to access values without snippets */}
-      {/* Use the 'snippet' property of fields with dangerouslySetInnerHtml to render snippets */}
-      {/* tqi - sanitize before setting here ??! */}
-      <div className="sui-result__details"  dangerouslySetInnerHTML={{ __html: result.body_content.snippet }}>        
-      </div>
+    <div className="sui-result__body sui-result__details ">      
+      <SanitizeHTML  html={result.body_content.snippet }    />
     </div>
   </li>
 );
@@ -109,10 +104,10 @@ export default function App() {
                   }
                   bodyContent={
                     <Results
-                      //resultView={CustomResultView}   
+                      resultView={CustomResultView}   
                       titleField={getConfig().titleField}
                       urlField={getConfig().urlField}
-                      thumbnailField={getConfig().thumbnailField}
+                      //thumbnailField={getConfig().thumbnailField}
                       shouldTrackClickThrough={true}
                     />
                   }

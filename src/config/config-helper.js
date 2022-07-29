@@ -101,7 +101,7 @@ export function buildSearchOptionsFromConfig() {
       acc[n] = {
         raw: {},
         snippet: {
-          size: 100,
+          size: 200,
           fallback: true
         }
       };
