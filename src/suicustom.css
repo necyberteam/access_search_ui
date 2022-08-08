@@ -1,0 +1,15 @@
+
+/* override from Elastic Search UI generated UI styles.css  */
+
+.sui-layout-body:after {
+  display: none; 
+}
+
+.sui-layout-body {
+  background-color: #ffffff;
+
+}
+.sui-layout-header {  
+  border-bottom: 0px;
+}    
+  

@@ -16,6 +16,7 @@ import {
 } from "@elastic/react-search-ui";
 import { Layout } from "@elastic/react-search-ui-views";
 import "@elastic/react-search-ui-views/lib/styles/styles.css";
+import './suicustom.css';
 
 import {
   buildAutocompleteQueryConfig,
@@ -35,20 +36,7 @@ const connector = new AppSearchAPIConnector({
   hostIdentifier,
   endpointBase
 });
-//result_fields: {
- // "body_content": {
-  //  snippet: {
-   //   size: 200,
-    //  fallback: true
-   // }
-  //},
-  //title: {
-   // snippet: {
-    //  size: 10,
-     // fallback: true
-   // }
- // }
-//},
+
 const config = {
   searchQuery: {  
     
@@ -103,6 +91,7 @@ export default function App() {
                     </div>
                   }
                   bodyContent={
+                   
                     <Results
                       resultView={CustomResultView}   
                       titleField={getConfig().titleField}
@@ -110,7 +99,9 @@ export default function App() {
                       //thumbnailField={getConfig().thumbnailField}
                       shouldTrackClickThrough={true}
                     />
+                   
                   }
+
                   bodyHeader={
                     <React.Fragment>
                       {wasSearched && <PagingInfo />}
