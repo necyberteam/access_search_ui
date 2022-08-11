@@ -45,14 +45,33 @@ const connector = new AppSearchAPIConnector({
 
 const config = {
   searchQuery: {
-
     facets: buildFacetConfigFromConfig(),
     ...buildSearchOptionsFromConfig()
   },
+  onSearch:
+    (requestState, queryConfig, next) => {
+      const updatedState = beforeSearch(requestState);
+      return next(updatedState, queryConfig);
+    },
   autocompleteQuery: buildAutocompleteQueryConfig(),
   apiConnector: connector,
   alwaysSearchOnInitialLoad: false
 };
+
+// Upon search, set up the sui-layout-div with the classes and id
+// in order to make it the collapse target
+
+function beforeSearch(requestState) {
+  
+  const bodyarea = document.getElementsByClassName('sui-layout-body');
+
+  if (bodyarea && bodyarea[0] && !bodyarea[0].id) {
+
+    bodyarea[0].classList.add('collapse', 'show');
+    bodyarea[0].setAttribute('id', 'collapseTarget');
+  }  
+  return requestState;
+}
 
 const CustomResultView = ({ result, onClickLink }) => (
   <li className="sui-result">
@@ -74,15 +93,6 @@ const CustomResultView = ({ result, onClickLink }) => (
 );
 
 export default function App() {
-
-  window.onload = function () {
-    const bodyarea = document.getElementsByClassName('sui-layout-body');
-    console.log(bodyarea);
-    if (bodyarea && bodyarea[0]) {
-      bodyarea[0].classList.add('collapse', 'show');
-      bodyarea[0].setAttribute('id', 'collapseTarget');
-    }
-  }
 
   return (
     <SearchProvider config={config}>
@@ -155,5 +165,3 @@ const CollapseBut = () => {
     </button>
   )
 }
-
-/* <button className="btn btn-primary" type="button"  */
