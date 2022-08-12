@@ -157,11 +157,13 @@ const CollapseBut = () => {
   const changeText = () => setIsHidden(!isHidden);
 
   return (
-    <button className="btn btn-primary" type="button"
+    <div class="d-flex mt-3">
+      <button className="btn btn-outline-secondary ms-auto" type="button"
       data-bs-toggle="collapse" data-bs-target="#collapseTarget"
       aria-expanded="true" aria-controls="collapseTarget"
       onClick={() => changeText()}>
       {isHidden ? "Show Results" : "Hide Results"}
-    </button>
+      </button>
+    </div>
   )
 }
