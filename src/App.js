@@ -105,7 +105,7 @@ export default function App() {
                   header={
                     <>
                       <SearchBox autocompleteSuggestions={true} />
-                      <CollapseBut></CollapseBut>
+                      {wasSearched && <CollapseBut></CollapseBut>}
                     </>
                   }
 
