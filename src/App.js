@@ -32,8 +32,7 @@ import {
   getFacetFields
 } from "./config/config-helper";
 
-import CustomFacetView  from "./FacetView.js";
-import { SanitizeHTML, sanitizeStr } from "./Sanitize";
+import {CustomResultView, CustomFacetView}   from "./CustomViews.js";
 
 const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig();
 const connector = new AppSearchAPIConnector({
@@ -73,25 +72,6 @@ function beforeSearch(requestState) {
   return requestState;
 }
 
-const CustomResultView = ({ result, onClickLink }) => (
-  <li className="sui-result">
-    <div className="sui-result__header">
-
-      {/* Maintain onClickLink to correct track click throughs for analytics*/}
-      <a className="sui-result__title sui-result__title-link"
-        onClick={onClickLink}
-        href={result.url.raw}
-        target="_blank" rel="noopener noreferrer"
-        dangerouslySetInnerHTML={{ __html: `${sanitizeStr(result.title.snippet)}` }}>
-      </a>
-
-    </div>
-    <div className="sui-result__body sui-result__details ">
-      <SanitizeHTML html={result.body_content.snippet} />
-    </div>
-  </li>
-);
-
 export default function App() {
 
   return (
@@ -130,8 +110,7 @@ export default function App() {
                     <Results
                       resultView={CustomResultView}
                       titleField={getConfig().titleField}
-                      urlField={getConfig().urlField}
-                      //thumbnailField={getConfig().thumbnailField}
+                      urlField={getConfig().urlField}                      
                       shouldTrackClickThrough={true}
                     />
                   }
