@@ -15,8 +15,8 @@ import {
   Sorting,
   WithSearch
 } from "@elastic/react-search-ui";
-import { Layout } from "@elastic/react-search-ui-views";
 
+import { Layout } from "@elastic/react-search-ui-views";
 import { Collapse } from 'bootstrap/js/dist/collapse';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -32,7 +32,7 @@ import {
   getFacetFields
 } from "./config/config-helper";
 
-
+import CustomFacetView  from "./FacetView.js";
 import { SanitizeHTML, sanitizeStr } from "./Sanitize";
 
 const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig();
@@ -118,7 +118,10 @@ export default function App() {
                         />
                       )}
                       {getFacetFields().map(field => (
-                        <Facet key={field} field={field} label="Source" />
+                        <Facet key={field} field={field} 
+                              label="Source" 
+                              view={CustomFacetView}
+                        />
                       ))}
                     </div>
                   }
