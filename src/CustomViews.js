@@ -3,6 +3,26 @@ import React from "react";
 import { appendClassName, getFilterValueDisplay } from "@elastic/react-search-ui-views/lib/view-helpers";
 
 import { SearchUrlNames } from "./SearchUrlNames.js";
+import { SanitizeHTML, sanitizeStr } from "./Sanitize";
+
+const CustomResultView = ({ result, onClickLink }) => (
+  <li className="sui-result">
+    <div className="sui-result__header">
+
+      {/* Maintain onClickLink to correct track click throughs for analytics*/}
+      <a className="sui-result__title sui-result__title-link"
+        onClick={onClickLink}
+        href={result.url.raw}
+        target="_blank" rel="noopener noreferrer"
+        dangerouslySetInnerHTML={{ __html: `${sanitizeStr(result.title.snippet)}` }}>
+      </a>
+
+    </div>
+    <div className="sui-result__body sui-result__details ">
+      <SanitizeHTML html={result.body_content.snippet} />
+    </div>
+  </li>
+);
 
 // This is largely a copy of MultiCheckBoxFacetView
 // Necessary so that we can display our own mapped labels for the options.
@@ -96,4 +116,4 @@ function getSearchOptionDisplay(option) {
   return (displayName === undefined ? String(option) : displayName);
 }
 
-export default CustomFacetView;
+export {CustomResultView, CustomFacetView};
