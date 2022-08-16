@@ -1,6 +1,6 @@
 
 import React from "react";
-import { appendClassName, getFilterValueDisplay } from "@elastic/react-search-ui-views/lib/view-helpers";
+import { appendClassName, getFilterValueDisplay } from "@elastic/react-search-ui-views/lib/esm/view-helpers";
 
 import { SearchUrlNames } from "./SearchUrlNames.js";
 import { SanitizeHTML, sanitizeStr } from "./Sanitize";
