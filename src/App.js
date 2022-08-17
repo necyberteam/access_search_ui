@@ -1,6 +1,10 @@
 import React from "react";
 import { useState } from 'react';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+import "@elastic/react-search-ui-views/lib/styles/styles.css";
+import './suicustom.css';
+
 import AppSearchAPIConnector from "@elastic/search-ui-app-search-connector";
 
 import {
@@ -17,11 +21,8 @@ import {
 } from "@elastic/react-search-ui";
 
 import { Layout } from "@elastic/react-search-ui-views";
+// eslint-disable-next-line no-unused-vars
 import { Collapse } from 'bootstrap/js/dist/collapse';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-import "@elastic/react-search-ui-views/lib/styles/styles.css";
-import './suicustom.css';
 
 import {
   buildAutocompleteQueryConfig,
@@ -99,7 +100,7 @@ export default function App() {
                       )}
                       {getFacetFields().map(field => (
                         <Facet key={field} field={field} 
-                              label="SourceXX" 
+                              label="SourceQ" 
                               view={CustomFacetView}
                         />
                       ))}
