@@ -99,7 +99,7 @@ export default function App() {
                       )}
                       {getFacetFields().map(field => (
                         <Facet key={field} field={field} 
-                              label="Source" 
+                              label="SourceXX" 
                               view={CustomFacetView}
                         />
                       ))}
