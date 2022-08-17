@@ -1,7 +1,6 @@
 import React from "react";
 import { useState } from 'react';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
 import "@elastic/react-search-ui-views/lib/styles/styles.css";
 import './suicustom.css';
 
@@ -33,7 +32,7 @@ import {
   getFacetFields
 } from "./config/config-helper";
 
-import {CustomResultView, CustomFacetView}   from "./CustomViews.js";
+import { CustomResultView, CustomFacetView } from "./CustomViews.js";
 
 const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig();
 const connector = new AppSearchAPIConnector({
@@ -62,18 +61,22 @@ const config = {
 // in order to make it the collapse target
 
 function beforeSearch(requestState) {
-  
+
   const bodyarea = document.getElementsByClassName('sui-layout-body');
 
   if (bodyarea && bodyarea[0] && !bodyarea[0].id) {
 
     bodyarea[0].classList.add('collapse', 'show');
     bodyarea[0].setAttribute('id', 'collapseTarget');
-  }  
+  }
   return requestState;
 }
 
 export default function App() {
+
+  if (process.env.NODE_ENV === "development") {
+    require('bootstrap/dist/css/bootstrap.min.css');
+  }
 
   return (
     <SearchProvider config={config}>
@@ -99,9 +102,9 @@ export default function App() {
                         />
                       )}
                       {getFacetFields().map(field => (
-                        <Facet key={field} field={field} 
-                              label="SourceQ" 
-                              view={CustomFacetView}
+                        <Facet key={field} field={field}
+                          label="SourceQ"
+                          view={CustomFacetView}
                         />
                       ))}
                     </div>
@@ -111,7 +114,7 @@ export default function App() {
                     <Results
                       resultView={CustomResultView}
                       titleField={getConfig().titleField}
-                      urlField={getConfig().urlField}                      
+                      urlField={getConfig().urlField}
                       shouldTrackClickThrough={true}
                     />
                   }
@@ -142,10 +145,10 @@ const CollapseBut = () => {
   return (
     <div class="d-flex mt-3">
       <button className="btn btn-outline-secondary ms-auto" type="button"
-      data-bs-toggle="collapse" data-bs-target="#collapseTarget"
-      aria-expanded="true" aria-controls="collapseTarget"
-      onClick={() => changeText()}>
-      {isHidden ? "Show Results" : "Hide Results"}
+        data-bs-toggle="collapse" data-bs-target="#collapseTarget"
+        aria-expanded="true" aria-controls="collapseTarget"
+        onClick={() => changeText()}>
+        {isHidden ? "Show Results" : "Hide Results"}
       </button>
     </div>
   )
