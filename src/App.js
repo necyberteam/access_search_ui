@@ -75,7 +75,10 @@ function beforeSearch(requestState) {
 export default function App() {
 
   if (process.env.NODE_ENV === "development") {
+    console.log("including bootstrap: " + process.env.NODE_ENV);
     require('bootstrap/dist/css/bootstrap.min.css');
+  } else {
+    console.log("not incl bootstrap: " + process.env.NODE_ENV);
   }
 
   return (
@@ -143,7 +146,7 @@ const CollapseBut = () => {
   const changeText = () => setIsHidden(!isHidden);
 
   return (
-    <div class="d-flex mt-3">
+    <div className="d-flex mt-3">
       <button className="btn btn-outline-secondary ms-auto" type="button"
         data-bs-toggle="collapse" data-bs-target="#collapseTarget"
         aria-expanded="true" aria-controls="collapseTarget"
