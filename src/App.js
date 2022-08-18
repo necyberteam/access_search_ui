@@ -153,13 +153,11 @@ const CollapseBut = () => {
         type="button"
         data-bs-toggle="collapse" 
         data-bs-target="#sui-collapseTarget"        
+        aria-controls="sui-collapseTarget"
+        aria-expanded={isHidden ? "false" : "true"}
         onClick={() => changeText()}>
         {isHidden ? "Show Results" : "Hide Results"}
       </button>
     </div>
   )
 }
-
-/*        aria-controls="sui-collapseTarget"
-        aria-controls="sui-collapseTarget"         
- */
