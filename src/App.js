@@ -63,9 +63,10 @@ const config = {
 function beforeSearch(requestState) {
 
   const bodyarea = document.getElementsByClassName('sui-layout-body');
-
+  console.log("in beforeSearch");
   if (bodyarea && bodyarea[0] && !bodyarea[0].id) {
 
+    console.log("in beforeSearch - setting collapse/show");
     bodyarea[0].classList.add('collapse', 'show');
     bodyarea[0].setAttribute('id', 'sui-collapseTarget');
   }
@@ -152,10 +153,13 @@ const CollapseBut = () => {
         type="button"
         data-bs-toggle="collapse" 
         data-bs-target="#sui-collapseTarget"        
-        aria-controls="sui-collapseTarget"         
         onClick={() => changeText()}>
         {isHidden ? "Show Results" : "Hide Results"}
       </button>
     </div>
   )
 }
+
+/*        aria-controls="sui-collapseTarget"
+        aria-controls="sui-collapseTarget"         
+ */
