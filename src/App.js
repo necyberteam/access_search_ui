@@ -67,7 +67,7 @@ function beforeSearch(requestState) {
   if (bodyarea && bodyarea[0] && !bodyarea[0].id) {
 
     bodyarea[0].classList.add('collapse', 'show');
-    bodyarea[0].setAttribute('id', 'collapseTarget');
+    bodyarea[0].setAttribute('id', 'sui-collapseTarget');
   }
   return requestState;
 }
@@ -106,7 +106,7 @@ export default function App() {
                       )}
                       {getFacetFields().map(field => (
                         <Facet key={field} field={field}
-                          label="SourceQ"
+                          label="Source"
                           view={CustomFacetView}
                         />
                       ))}
@@ -151,8 +151,8 @@ const CollapseBut = () => {
         className="btn btn-outline-secondary ms-auto" 
         type="button"
         data-bs-toggle="collapse" 
-        data-bs-target="#collapseTarget"        
-        aria-controls="collapseTarget"         
+        data-bs-target="#sui-collapseTarget"        
+        aria-controls="sui-collapseTarget"         
         onClick={() => changeText()}>
         {isHidden ? "Show Results" : "Hide Results"}
       </button>
