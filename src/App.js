@@ -57,19 +57,32 @@ const config = {
   alwaysSearchOnInitialLoad: false
 };
 
-// Upon search, set up the sui-layout-div with the classes and id
-// in order to make it the collapse target
+// upon first search, make a collapse target div around the existing div with the class sui-layout-body
+// (setting the attributes directly on the sui-layout-body div causes issues when put into the drupal site)
+function beforeSearch ( requestState) {
 
-function beforeSearch(requestState) {
-
-  const bodyarea = document.getElementsByClassName('sui-layout-body');
-  console.log("in beforeSearch");
+  const bodyarea = document.getElementsByClassName('sui-layout-body');      
+  
   if (bodyarea && bodyarea[0] && !bodyarea[0].id) {
+    console.log("setting up collpase container");
 
-    console.log("in beforeSearch - setting collapse/show");
-    bodyarea[0].classList.add('collapse', 'show');
-    bodyarea[0].setAttribute('id', 'sui-collapseTarget');
-  }
+    bodyarea[0].setAttribute('id','sui-layout-body-id');
+    
+    const layoutDiv = document.getElementsByClassName('sui-layout');      
+
+    if (layoutDiv && layoutDiv[0]) {
+
+      if (!document.getElementById('sui-collapse-target')) {
+
+        const wrapperDiv = document.createElement("div");
+        wrapperDiv.setAttribute('id', 'sui-collapse-target');
+        wrapperDiv.classList.add('collapse', 'show');
+      
+        layoutDiv[0].insertBefore(wrapperDiv, bodyarea[0]);
+        wrapperDiv.appendChild(bodyarea[0]);
+      }
+    }
+  } 
   return requestState;
 }
 
@@ -152,8 +165,8 @@ const CollapseBut = () => {
         className="btn btn-outline-secondary ms-auto" 
         type="button"
         data-bs-toggle="collapse" 
-        data-bs-target="#sui-collapseTarget"        
-        aria-controls="sui-collapseTarget"
+        data-bs-target="#sui-collapse-target"        
+        aria-controls="sui-collapse-target"
         aria-expanded={isHidden ? "false" : "true"}
         onClick={() => changeText()}>
         {isHidden ? "Show Results" : "Hide Results"}
