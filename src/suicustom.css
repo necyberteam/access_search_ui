@@ -12,4 +12,11 @@
 .sui-layout-header {  
   border-bottom: 0px;
 }    
-  
+
+/* new classes (not from ES) */
+
+.sui-collapse-hide {  
+  display: none;
+}
+.sui-collapse-show {  
+}

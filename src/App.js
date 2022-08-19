@@ -20,8 +20,6 @@ import {
 } from "@elastic/react-search-ui";
 
 import { Layout } from "@elastic/react-search-ui-views";
-// eslint-disable-next-line no-unused-vars
-import { Collapse } from 'bootstrap';
 
 import {
   buildAutocompleteQueryConfig,
@@ -57,43 +55,21 @@ const config = {
   alwaysSearchOnInitialLoad: false
 };
 
-// upon first search, make a collapse target div around the existing div with the class sui-layout-body
-// (setting the attributes directly on the sui-layout-body div causes issues when put into the drupal site)
-function beforeSearch ( requestState) {
+// upon first search, set the id on the collapsible area. This is a workaround 
+// because we don't have access to this class in the ElasticcSearch UI component
+function beforeSearch(requestState) {
 
-  const bodyarea = document.getElementsByClassName('sui-layout-body');      
-  
+  const bodyarea = document.getElementsByClassName('sui-layout-body');
+
   if (bodyarea && bodyarea[0] && !bodyarea[0].id) {
+
     console.log("setting up collpase container");
-
-    bodyarea[0].setAttribute('id','sui-layout-body-id');
-    
-    const layoutDiv = document.getElementsByClassName('sui-layout');      
-
-    if (layoutDiv && layoutDiv[0]) {
-
-      if (!document.getElementById('sui-collapse-target')) {
-
-        const wrapperDiv = document.createElement("div");
-        wrapperDiv.setAttribute('id', 'sui-collapse-target');
-        wrapperDiv.classList.add('collapse', 'show');
-      
-        layoutDiv[0].insertBefore(wrapperDiv, bodyarea[0]);
-        wrapperDiv.appendChild(bodyarea[0]);
-      }
-    }
-  } 
+    bodyarea[0].setAttribute('id', 'sui-layout-body-id');
+  }
   return requestState;
 }
 
 export default function App() {
-
-  if (process.env.NODE_ENV === "development") {
-    console.log("including bootstrap: " + process.env.NODE_ENV);
-    require('bootstrap/dist/css/bootstrap.min.css');    
-  } else {
-    console.log("not incl bootstrap: " + process.env.NODE_ENV);
-  }
 
   return (
     <SearchProvider config={config}>
@@ -157,20 +133,25 @@ const CollapseBut = () => {
 
   const [isHidden, setIsHidden] = useState(false);
 
-  const changeText = () => setIsHidden(!isHidden);
+  const doCollapseToggle = (isHidden) => {
+
+    setIsHidden(!isHidden);
+    console.log("in docollapsetoggle")
+
+    const bdiv = document.getElementById('sui-layout-body-id');
+    if (bdiv) {
+      bdiv.classList.add(isHidden ? 'sui-collapse-show' : 'sui-collapse-hide');
+      bdiv.classList.remove(isHidden ? 'sui-collapse-hide' : 'sui-collapse-show');
+    }
+  }
 
   return (
     <div className="d-flex mt-3">
-      <button 
-        className="btn btn-outline-secondary ms-auto" 
+      <button
+        className="btn btn-outline-secondary ms-auto"
         type="button"
-        data-bs-toggle="collapse" 
-        data-bs-target="#sui-collapse-target"        
-        aria-controls="sui-collapse-target"
-        aria-expanded={isHidden ? "false" : "true"}
-        onClick={() => changeText()}>
+        onClick={() => doCollapseToggle(isHidden)}>
         {isHidden ? "Show Results" : "Hide Results"}
       </button>
-    </div>
-  )
+    </div>)
 }
