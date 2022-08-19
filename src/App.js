@@ -21,7 +21,7 @@ import {
 
 import { Layout } from "@elastic/react-search-ui-views";
 // eslint-disable-next-line no-unused-vars
-import { Collapse } from 'bootstrap/js/dist/collapse';
+import { Collapse } from 'bootstrap';
 
 import {
   buildAutocompleteQueryConfig,
@@ -90,7 +90,7 @@ export default function App() {
 
   if (process.env.NODE_ENV === "development") {
     console.log("including bootstrap: " + process.env.NODE_ENV);
-    require('bootstrap/dist/css/bootstrap.min.css');
+    require('bootstrap/dist/css/bootstrap.min.css');    
   } else {
     console.log("not incl bootstrap: " + process.env.NODE_ENV);
   }
