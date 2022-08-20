@@ -1,6 +1,9 @@
 import React from "react";
 import { useState } from 'react';
 
+import "@elastic/react-search-ui-views/lib/styles/styles.css";
+import './suicustom.css';
+
 import AppSearchAPIConnector from "@elastic/search-ui-app-search-connector";
 
 import {
@@ -17,11 +20,6 @@ import {
 } from "@elastic/react-search-ui";
 
 import { Layout } from "@elastic/react-search-ui-views";
-import { Collapse } from 'bootstrap/js/dist/collapse';
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-import "@elastic/react-search-ui-views/lib/styles/styles.css";
-import './suicustom.css';
 
 import {
   buildAutocompleteQueryConfig,
@@ -32,7 +30,7 @@ import {
   getFacetFields
 } from "./config/config-helper";
 
-import {CustomResultView, CustomFacetView}   from "./CustomViews.js";
+import { CustomResultView, CustomFacetView } from "./CustomViews.js";
 
 const { hostIdentifier, searchKey, endpointBase, engineName } = getConfig();
 const connector = new AppSearchAPIConnector({
@@ -57,18 +55,17 @@ const config = {
   alwaysSearchOnInitialLoad: false
 };
 
-// Upon search, set up the sui-layout-div with the classes and id
-// in order to make it the collapse target
-
+// upon first search, set the id on the collapsible area. This is a workaround 
+// because we don't have access to this class in the ElasticcSearch UI component
 function beforeSearch(requestState) {
-  
+
   const bodyarea = document.getElementsByClassName('sui-layout-body');
 
   if (bodyarea && bodyarea[0] && !bodyarea[0].id) {
 
-    bodyarea[0].classList.add('collapse', 'show');
-    bodyarea[0].setAttribute('id', 'collapseTarget');
-  }  
+    console.log("setting up collpase container");
+    bodyarea[0].setAttribute('id', 'sui-layout-body-id');
+  }
   return requestState;
 }
 
@@ -98,9 +95,9 @@ export default function App() {
                         />
                       )}
                       {getFacetFields().map(field => (
-                        <Facet key={field} field={field} 
-                              label="Source" 
-                              view={CustomFacetView}
+                        <Facet key={field} field={field}
+                          label="Source"
+                          view={CustomFacetView}
                         />
                       ))}
                     </div>
@@ -110,7 +107,7 @@ export default function App() {
                     <Results
                       resultView={CustomResultView}
                       titleField={getConfig().titleField}
-                      urlField={getConfig().urlField}                      
+                      urlField={getConfig().urlField}
                       shouldTrackClickThrough={true}
                     />
                   }
@@ -136,16 +133,25 @@ const CollapseBut = () => {
 
   const [isHidden, setIsHidden] = useState(false);
 
-  const changeText = () => setIsHidden(!isHidden);
+  const doCollapseToggle = (isHidden) => {
+
+    setIsHidden(!isHidden);
+    console.log("in docollapsetoggle")
+
+    const bdiv = document.getElementById('sui-layout-body-id');
+    if (bdiv) {
+      bdiv.classList.add(isHidden ? 'sui-collapse-show' : 'sui-collapse-hide');
+      bdiv.classList.remove(isHidden ? 'sui-collapse-hide' : 'sui-collapse-show');
+    }
+  }
 
   return (
-    <div class="d-flex mt-3">
-      <button className="btn btn-outline-secondary ms-auto" type="button"
-      data-bs-toggle="collapse" data-bs-target="#collapseTarget"
-      aria-expanded="true" aria-controls="collapseTarget"
-      onClick={() => changeText()}>
-      {isHidden ? "Show Results" : "Hide Results"}
+    <div className="d-flex mt-3">
+      <button
+        className="btn btn-outline-secondary ms-auto"
+        type="button"
+        onClick={() => doCollapseToggle(isHidden)}>
+        {isHidden ? "Show Results" : "Hide Results"}
       </button>
-    </div>
-  )
+    </div>)
 }
