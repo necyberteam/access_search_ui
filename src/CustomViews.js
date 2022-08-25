@@ -5,24 +5,38 @@ import { appendClassName, getFilterValueDisplay } from "@elastic/react-search-ui
 import { SearchUrlNames } from "./SearchUrlNames.js";
 import { SanitizeHTML, sanitizeStr } from "./Sanitize";
 
-const CustomResultView = ({ result, onClickLink }) => (
-  <li className="sui-result">
-    <div className="sui-result__header">
+function CustomResultView({ result, onClickLink }) {
 
-      {/* Maintain onClickLink to correct track click throughs for analytics*/}
-      <a className="sui-result__title sui-result__title-link"
-        onClick={onClickLink}
-        href={result.url.raw}
-        target="_blank" rel="noopener noreferrer"
-        dangerouslySetInnerHTML={{ __html: `${sanitizeStr(result.title.snippet)}` }}>
-      </a>
+  let bodySnip ='';
+  let titleSnip ='';
+  try {  
+    titleSnip = result.title && result.title.snippet;
+    bodySnip = result.body_content && result.body_content.snippet;    
 
-    </div>
-    <div className="sui-result__body sui-result__details ">
-      <SanitizeHTML html={result.body_content.snippet} />
-    </div>
-  </li>
-);
+  } catch (error) {     
+    console.log(`Error in CustomResultView: ${error}`)
+  }
+
+  return (
+    <li className="sui-result">
+      <div className="sui-result__header">
+
+        {/* Maintain onClickLink to correct track click throughs for analytics*/}
+        <a className="sui-result__title sui-result__title-link"
+          onClick={onClickLink}
+          href={result.url.raw}
+          target="_blank" rel="noopener noreferrer"
+          dangerouslySetInnerHTML={{ __html: `${sanitizeStr(titleSnip)}` }}>
+        </a>
+
+      </div>
+      <div className="sui-result__body sui-result__details ">
+        <SanitizeHTML html={bodySnip} />
+      </div>
+    </li>
+  );
+
+}
 
 // This is largely a copy of MultiCheckBoxFacetView
 // Necessary so that we can display our own mapped labels for the options.
@@ -116,4 +130,4 @@ function getSearchOptionDisplay(option) {
   return (displayName === undefined ? String(option) : displayName);
 }
 
-export {CustomResultView, CustomFacetView};
+export { CustomResultView, CustomFacetView };
