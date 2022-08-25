@@ -97,7 +97,8 @@ export default function App() {
                       {getFacetFields().map(field => (
                         <Facet key={field} field={field}
                           label="Source"
-                          view={CustomFacetView}
+                          show={100}
+                          view={CustomFacetView}                          
                         />
                       ))}
                     </div>
@@ -136,8 +137,7 @@ const CollapseBut = () => {
   const doCollapseToggle = (isHidden) => {
 
     setIsHidden(!isHidden);
-    console.log("in docollapsetoggle")
-
+    
     const bdiv = document.getElementById('sui-layout-body-id');
     if (bdiv) {
       bdiv.classList.add(isHidden ? 'sui-collapse-show' : 'sui-collapse-hide');

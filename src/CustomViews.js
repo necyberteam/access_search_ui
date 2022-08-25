@@ -2,18 +2,18 @@
 import React from "react";
 import { appendClassName, getFilterValueDisplay } from "@elastic/react-search-ui-views/lib/esm/view-helpers";
 
-import { SearchUrlNames } from "./SearchUrlNames.js";
+import { SourceSpecs } from "./SearchUrlNames.js";
 import { SanitizeHTML, sanitizeStr } from "./Sanitize";
 
 function CustomResultView({ result, onClickLink }) {
 
-  let bodySnip ='';
-  let titleSnip ='';
-  try {  
+  let bodySnip = '';
+  let titleSnip = '';
+  try {
     titleSnip = result.title && result.title.snippet;
-    bodySnip = result.body_content && result.body_content.snippet;    
+    bodySnip = result.body_content && result.body_content.snippet;
 
-  } catch (error) {     
+  } catch (error) {
     console.log(`Error in CustomResultView: ${error}`)
   }
 
@@ -38,9 +38,9 @@ function CustomResultView({ result, onClickLink }) {
 
 }
 
-// This is largely a copy of MultiCheckBoxFacetView
-// Necessary so that we can display our own mapped labels for the options.
-// For us, this is display name mapped from the URL
+// This is a variation on  MultiCheckBoxFacetView
+// Necessary so that we can display our own mapped labels for the options, 
+// and sort as we like.
 
 function CustomFacetView({
   className,
@@ -55,6 +55,8 @@ function CustomFacetView({
   searchPlaceholder
 }) {
 
+  var ordOptions = orderOptions(options);
+  
   return (
     <fieldset className={appendClassName("sui-facet", className)}>
       <legend className="sui-facet__title">{label}</legend>
@@ -73,8 +75,8 @@ function CustomFacetView({
       )}
 
       <div className="sui-multi-checkbox-facet">
-        {options.length < 1 && <div>No matching options</div>}
-        {options.map((option) => {
+        {ordOptions.length < 1 && <div>No matching options</div>}
+        {ordOptions.map((option) => {
           const checked = option.selected;
           const value = option.value;
           return (
@@ -97,7 +99,7 @@ function CustomFacetView({
                   onChange={() => (checked ? onRemove(value) : onSelect(value))}
                 />
                 <span className="sui-multi-checkbox-facet__input-text">
-                  {getSearchOptionDisplay(option.value)}
+                  {getSearchOptionDisplay(option)}
                 </span>
               </div>
               <span className="sui-multi-checkbox-facet__option-count">
@@ -122,12 +124,34 @@ function CustomFacetView({
   );
 }
 
+// merge the source options list returned by Search UI with our custom Source Specs
+// to get the display texts and display order. order=99 - end of list - if not found.
+
+function orderOptions(resultOptions) {
+
+  let res = [];
+
+  res = resultOptions.map(obj => {
+    
+    const index = SourceSpecs.findIndex(el => el["url"] === obj["value"]);
+
+    const specs = index !== -1 ? SourceSpecs[index] : { order: 99 };
+
+    return {
+      ...obj,
+      specs
+    };
+  });
+
+  res.sort((a, b) => a.specs.order - b.specs.order);
+  return res;
+}
 function getSearchOptionDisplay(option) {
 
   if (option === undefined || option === null) return "";
-  var displayName = SearchUrlNames[option];
-
-  return (displayName === undefined ? String(option) : displayName);
+ 
+  return (option.specs.display === undefined || option.specs.display === ""
+    ? String(option.value) : option.specs.display);
 }
 
 export { CustomResultView, CustomFacetView };
