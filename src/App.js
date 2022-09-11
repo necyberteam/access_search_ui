@@ -40,6 +40,10 @@ const connector = new AppSearchAPIConnector({
   endpointBase
 });
 
+export var CurrentSearchTerm = '';
+export const ResultDisplayLength = 200;
+export const TitleDisplayLength = 100;
+
 const config = {
   searchQuery: {
     facets: buildFacetConfigFromConfig(),
@@ -47,7 +51,9 @@ const config = {
   },
   onSearch:
     (requestState, queryConfig, next) => {
+      
       const updatedState = beforeSearch(requestState);
+      CurrentSearchTerm = requestState.searchTerm;      
       return next(updatedState, queryConfig);
     },
   autocompleteQuery: buildAutocompleteQueryConfig(),
@@ -62,8 +68,7 @@ function beforeSearch(requestState) {
   const bodyarea = document.getElementsByClassName('sui-layout-body');
 
   if (bodyarea && bodyarea[0] && !bodyarea[0].id) {
-
-    console.log("setting up collpase container");
+    
     bodyarea[0].setAttribute('id', 'sui-layout-body-id');
   }
   return requestState;

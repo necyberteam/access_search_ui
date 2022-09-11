@@ -4,17 +4,49 @@ import { appendClassName, getFilterValueDisplay } from "@elastic/react-search-ui
 
 import { SourceSpecs } from "./SearchUrlNames.js";
 import { SanitizeHTML, sanitizeStr } from "./Sanitize";
+import { CurrentSearchTerm, ResultDisplayLength, TitleDisplayLength } from "./App.js";
+
+// Display one result. 
+// webcrawl (app search) and confluence connector (worksplace search) results need to be handled differently
+// as the fields are differnt, plus confluence does not make emphasized snippets. 
 
 function CustomResultView({ result, onClickLink }) {
 
   let bodySnip = '';
   let titleSnip = '';
   try {
-    titleSnip = result.title && result.title.snippet;
-    bodySnip = result.body_content && result.body_content.snippet;
+    const iTypeConfluence = 2;
+    const iTypeCrawl = 1;
+    let indexType = iTypeCrawl;
+
+    if (result.source && result.source.raw === 'confluence_cloud') {
+      indexType = iTypeConfluence;
+
+      // in case unwanted spaces come through the connecter,
+      // only allow the space (project) that is the documentation space  
+
+      if (result.project == null || result.project.raw !== 'ACCESSdocumentation') {
+        return ('');
+      }
+    }
+
+    if (indexType === iTypeCrawl) {
+      if (result.title != null) {
+        titleSnip = (result.title.snippet != null) ? result.title.snippet : result.title;
+      }
+      if (result.body_content != null) {
+        bodySnip = (result.body_content.snippet != null) ? result.body_content.snippet : result.body_content;
+      }
+    }
+    else {
+      // iTypeConfluence
+      if (result.title != null && result.title.raw != null) titleSnip = makeSnippet(result.title.raw, TitleDisplayLength);
+      if (result.body != null && result.body.raw != null) bodySnip = makeSnippet(result.body.raw, ResultDisplayLength);
+    }
 
   } catch (error) {
-    console.log(`Error in CustomResultView: ${error}`)
+    console.log(`!!! Error in CustomResultView: ${error}`);
+    console.log(result);
   }
 
   return (
@@ -38,6 +70,28 @@ function CustomResultView({ result, onClickLink }) {
 
 }
 
+// we need this to fix up the Workplace Search onfluence connector results to act like the results
+// returnedfrom App Search web crawl.
+// Insert emphasis markup around the search term and trim results around the term to size
+// if exact search term not found, just trim
+function makeSnippet(text, length) {
+
+  let snippet = '';
+  try {
+    let rterm = '<em>' + CurrentSearchTerm + '</em>';
+    let searchRegExp = new RegExp(CurrentSearchTerm, 'ig');
+    const emphasized = text.replace(searchRegExp, rterm);
+    let pos = emphasized.indexOf(rterm);    
+    if (pos === -1) pos = 0;
+    snippet = emphasized.substring(pos, pos + length);
+  }
+  catch (error) {
+    console.log(`!!! Error in makeSnippet: ${error} ` + text );    
+  }
+
+  return snippet;
+}
+
 // This is a variation on  MultiCheckBoxFacetView
 // Necessary so that we can display our own mapped labels for the options, 
 // and sort as we like.
@@ -56,7 +110,7 @@ function CustomFacetView({
 }) {
 
   var ordOptions = orderOptions(options);
-  
+
   return (
     <fieldset className={appendClassName("sui-facet", className)}>
       <legend className="sui-facet__title">{label}</legend>
@@ -125,14 +179,14 @@ function CustomFacetView({
 }
 
 // merge the source options list returned by Search UI with our custom Source Specs
-// to get the display texts and display order. order=99 - end of list - if not found.
+// to get the display texts and display order. order=99 (signifying end of list) if display order not found.
 
 function orderOptions(resultOptions) {
 
   let res = [];
 
   res = resultOptions.map(obj => {
-    
+
     const index = SourceSpecs.findIndex(el => el["url"] === obj["value"]);
 
     const specs = index !== -1 ? SourceSpecs[index] : { order: 99 };
@@ -149,7 +203,7 @@ function orderOptions(resultOptions) {
 function getSearchOptionDisplay(option) {
 
   if (option === undefined || option === null) return "";
- 
+
   return (option.specs.display === undefined || option.specs.display === ""
     ? String(option.value) : option.specs.display);
 }
