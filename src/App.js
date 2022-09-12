@@ -51,9 +51,9 @@ const config = {
   },
   onSearch:
     (requestState, queryConfig, next) => {
-      
+
       const updatedState = beforeSearch(requestState);
-      CurrentSearchTerm = requestState.searchTerm;      
+      CurrentSearchTerm = requestState.searchTerm;
       return next(updatedState, queryConfig);
     },
   autocompleteQuery: buildAutocompleteQueryConfig(),
@@ -68,7 +68,7 @@ function beforeSearch(requestState) {
   const bodyarea = document.getElementsByClassName('sui-layout-body');
 
   if (bodyarea && bodyarea[0] && !bodyarea[0].id) {
-    
+
     bodyarea[0].setAttribute('id', 'sui-layout-body-id');
   }
   return requestState;
@@ -94,16 +94,20 @@ export default function App() {
                   sideContent={
                     <div>
                       {wasSearched && (
-                        <Sorting
-                          label={"Sort by"}
-                          sortOptions={buildSortOptionsFromConfig()}
-                        />
-                      )}
+                        <>
+                          <Sorting
+                            label={"Sort by"}
+                            sortOptions={buildSortOptionsFromConfig()}
+                          />
+                          <span className="sui-facet-legend sui-facet-access">SOURCE</span>
+                        </>
+                      )
+                      }
                       {getFacetFields().map(field => (
                         <Facet key={field} field={field}
                           label="Source"
                           show={100}
-                          view={CustomFacetView}                          
+                          view={CustomFacetView}
                         />
                       ))}
                     </div>
@@ -142,7 +146,7 @@ const CollapseBut = () => {
   const doCollapseToggle = (isHidden) => {
 
     setIsHidden(!isHidden);
-    
+
     const bdiv = document.getElementById('sui-layout-body-id');
     if (bdiv) {
       bdiv.classList.add(isHidden ? 'sui-collapse-show' : 'sui-collapse-hide');

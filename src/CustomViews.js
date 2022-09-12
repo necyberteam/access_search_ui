@@ -112,9 +112,9 @@ function CustomFacetView({
   var ordOptions = orderOptions(options);
 
   return (
-    <fieldset className={appendClassName("sui-facet", className)}>
-      <legend className="sui-facet__title">{label}</legend>
 
+    <div className="sui-facet-access">        
+      
       {showSearch && (
         <div className="sui-facet-search">
           <input
@@ -174,7 +174,7 @@ function CustomFacetView({
           + More
         </button>
       )}
-    </fieldset>
+    </div>
   );
 }
 

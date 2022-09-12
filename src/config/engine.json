@@ -10,7 +10,7 @@
     "id",
     "body",
     "source",
-    "project"
+    "project"            
   ],
   
   "searchFields": ["title","body_content","body"],
