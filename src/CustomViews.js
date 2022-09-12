@@ -1,6 +1,6 @@
 
 import React from "react";
-import { appendClassName, getFilterValueDisplay } from "@elastic/react-search-ui-views/lib/esm/view-helpers";
+import { getFilterValueDisplay } from "@elastic/react-search-ui-views/lib/esm/view-helpers";
 
 import { SourceSpecs } from "./SearchUrlNames.js";
 import { SanitizeHTML, sanitizeStr } from "./Sanitize";
@@ -96,8 +96,7 @@ function makeSnippet(text, length) {
 // Necessary so that we can display our own mapped labels for the options, 
 // and sort as we like.
 
-function CustomFacetView({
-  className,
+function CustomFacetView({  
   label,
   onMoreClick,
   onRemove,

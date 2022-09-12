@@ -13,13 +13,10 @@
   border-bottom: 0px;
 }    
 
-.sui-facet {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+.sui-multi-checkbox-facet {
+  color: #4f4f4f;
+  font-size: 13px;
   margin: 0;
-  padding: 0;
-  border: 0;
 }
 
 /* new classes (not from ES) */
@@ -32,7 +29,7 @@
 
 .sui-facet-access {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
+  line-height: 2;
   font-weight: 400;
   margin: 0;
   padding: 0;
