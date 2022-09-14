@@ -81,15 +81,24 @@ function makeSnippet(text, length) {
     let rterm = '<em>' + CurrentSearchTerm + '</em>';
     let searchRegExp = new RegExp(CurrentSearchTerm, 'ig');
     const emphasized = text.replace(searchRegExp, rterm);
+    
     let pos = emphasized.indexOf(rterm);    
     if (pos === -1) pos = 0;
-    snippet = emphasized.substring(pos, pos + length);
+
+    // first chop off portion up to found word, then cut at space boundry
+    snippet = emphasized.substring(pos, emphasized.length);    
+    snippet = truncateAtSpace(snippet, length)    
   }
   catch (error) {
     console.log(`!!! Error in makeSnippet: ${error} ` + text );    
   }
-
   return snippet;
+}
+
+function truncateAtSpace (str, len)  {
+  if (str.length < len)  return str;
+  if (str.lastIndexOf(" ") === -1) return str.substring(0,len);  
+  return str.substring( 0, str.substring(0, len).lastIndexOf(" "));
 }
 
 // This is a variation on  MultiCheckBoxFacetView
