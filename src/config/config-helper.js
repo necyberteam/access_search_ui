@@ -1,4 +1,5 @@
 import config from "../config/engine.json";
+import { ResultDisplayLength, TitleDisplayLength } from "../App.js"; 
 
 /**
  * This file abstracts most logic around the configuration of the Reference UI.
@@ -101,7 +102,7 @@ export function buildSearchOptionsFromConfig() {
       acc[n] = {
         raw: {},
         snippet: {
-          size: 200,
+          size: ResultDisplayLength,
           fallback: true
         }
       };
@@ -136,7 +137,7 @@ export function buildSearchOptionsFromConfig() {
     resultFields[config.titleField] = {
       raw: {},
       snippet: {
-        size: 100,
+        size: TitleDisplayLength,
         fallback: true
       }
     };
@@ -159,7 +160,8 @@ export function buildFacetConfigFromConfig() {
     };
     return acc;
   }, undefined);
-
+console.log("build facets");  
+console.log(facets); 
   return facets;
 }
 

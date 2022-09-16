@@ -40,6 +40,10 @@ const connector = new AppSearchAPIConnector({
   endpointBase
 });
 
+export var CurrentSearchTerm = '';
+export const ResultDisplayLength = 200;
+export const TitleDisplayLength = 100;
+
 const config = {
   searchQuery: {
     facets: buildFacetConfigFromConfig(),
@@ -47,7 +51,9 @@ const config = {
   },
   onSearch:
     (requestState, queryConfig, next) => {
+
       const updatedState = beforeSearch(requestState);
+      CurrentSearchTerm = requestState.searchTerm;
       return next(updatedState, queryConfig);
     },
   autocompleteQuery: buildAutocompleteQueryConfig(),
@@ -63,7 +69,6 @@ function beforeSearch(requestState) {
 
   if (bodyarea && bodyarea[0] && !bodyarea[0].id) {
 
-    console.log("setting up collpase container");
     bodyarea[0].setAttribute('id', 'sui-layout-body-id');
   }
   return requestState;
@@ -89,14 +94,19 @@ export default function App() {
                   sideContent={
                     <div>
                       {wasSearched && (
-                        <Sorting
-                          label={"Sort by"}
-                          sortOptions={buildSortOptionsFromConfig()}
-                        />
-                      )}
+                        <>
+                          <Sorting
+                            label={"Sort by"}
+                            sortOptions={buildSortOptionsFromConfig()}
+                          />
+                          <span className="sui-facet-legend sui-facet-access">SOURCE</span>
+                        </>
+                      )
+                      }
                       {getFacetFields().map(field => (
                         <Facet key={field} field={field}
                           label="Source"
+                          show={100}
                           view={CustomFacetView}
                         />
                       ))}
@@ -136,7 +146,6 @@ const CollapseBut = () => {
   const doCollapseToggle = (isHidden) => {
 
     setIsHidden(!isHidden);
-    console.log("in docollapsetoggle")
 
     const bdiv = document.getElementById('sui-layout-body-id');
     if (bdiv) {
