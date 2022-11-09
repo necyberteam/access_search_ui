@@ -85,7 +85,12 @@ export const SourceSpecs = [
     {
         url: "xdmod.ccr.buffalo.edu" ,
         display: "XDMoD User Manual" ,
-        order: 14
-    }                            
+        order: 15
+    },
+    {
+        url: "docs.globus.org",
+        display: "Globus Docs",
+        order: 16
+    }                                                        
 ];
 
