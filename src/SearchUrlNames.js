@@ -33,6 +33,11 @@ export const SourceSpecs = [
         order: 5
     },    
     {
+        url: "identity.access-ci.org",
+        display:   "ACCESS Identity Management",
+        order: 5
+    },    
+    {
         url: "ask.cyberinfrastructure.org",
         display: "Ask.CI" ,
         order: 6
@@ -76,6 +81,16 @@ export const SourceSpecs = [
         url: "open.xdmod.org" ,
         display: "Open XDMoD Docs" ,
         order: 14
-    }              
+    },
+    {
+        url: "xdmod.ccr.buffalo.edu" ,
+        display: "XDMoD User Manual" ,
+        order: 15
+    },
+    {
+        url: "docs.globus.org",
+        display: "Globus Docs",
+        order: 16
+    }                                                        
 ];
 
