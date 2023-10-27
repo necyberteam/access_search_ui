@@ -155,9 +155,9 @@ const CollapseBut = () => {
   }
 
   return (
-    <div className="d-flex mt-3">
+    <div className="d-flex flex mt-5">
       <button
-        className="btn btn-outline-secondary ms-auto"
+        className="btn btn-outline-secondary btn-md-teal ms-auto"
         type="button"
         onClick={() => doCollapseToggle(isHidden)}>
         {isHidden ? "Show Results" : "Hide Results"}
