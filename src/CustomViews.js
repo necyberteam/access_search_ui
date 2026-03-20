@@ -1,10 +1,11 @@
 
 import React from "react";
-import { getFilterValueDisplay } from "@elastic/react-search-ui-views/lib/esm/view-helpers";
-
+import { ViewHelpers } from "@elastic/react-search-ui-views";
 import { SourceSpecs } from "./SearchUrlNames.js";
 import { SanitizeHTML, sanitizeStr } from "./Sanitize";
 import { CurrentSearchTerm, ResultDisplayLength, TitleDisplayLength } from "./App.js";
+
+const { getFilterValueDisplay } = ViewHelpers;
 
 // Display one result. 
 // webcrawl (app search) and confluence connector (worksplace search) results need to be handled differently

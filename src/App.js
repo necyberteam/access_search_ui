@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from 'react';
 
 import "@elastic/react-search-ui-views/lib/styles/styles.css";
@@ -75,6 +75,17 @@ function beforeSearch(requestState) {
 }
 
 export default function App() {
+
+  // Fix Downshift v3 accessibility issue: it incorrectly applies role="combobox"
+  // to the <form> element, which is only valid on <input> elements (ARIA spec).
+  useEffect(() => {
+    const form = document.querySelector('form[role="combobox"]');
+    if (form) {
+      form.removeAttribute("role");
+      form.removeAttribute("aria-expanded");
+      form.removeAttribute("aria-haspopup");
+    }
+  });
 
   return (
     <SearchProvider config={config}>
